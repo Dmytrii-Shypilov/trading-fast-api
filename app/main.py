@@ -18,6 +18,6 @@ async def home():
     start = time()
     # limit for 500 requests (20 requests per second)
     # may use semaphore for multiple request batches
-    data = await binance_client.get_pairs_klines_data(coins[:500])
+    data = await binance_client.get_pairs_klines_data(coins)
     return {'n': len(data), 'time': time() - start,
             'len': len(coins)}
