@@ -1,0 +1,4 @@
+PARAMETERS:
+1. pairedWith, volume, volatility
+2. frame, frameLength 
+3. indicators

@@ -13,7 +13,6 @@ class AsyncManager:
         self.tasks.append(asyncio.create_task(wrapper()))
 
     async def get_results(self):
-     
             results = await asyncio.gather(*self.tasks)
             self.tasks.clear()
             return results

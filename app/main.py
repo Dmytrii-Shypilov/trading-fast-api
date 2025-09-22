@@ -3,6 +3,7 @@ from binance import AsyncClient
 from time import time
 
 from .services.client import binance_client
+from .services.pattern_functions import pattern, add_b_engulf
 
 API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 
@@ -18,6 +19,8 @@ async def home():
     start = time()
     # limit for 500 requests (20 requests per second)
     # may use semaphore for multiple request batches
-    data = await binance_client.get_pairs_klines_data(coins)
+    # await binance_client.init_client()
+    data = await binance_client.get_pairs_klines_data(coins[:1])
+    # await binance_client.close_client()
     return {'n': len(data), 'time': time() - start,
             'len': len(coins)}
