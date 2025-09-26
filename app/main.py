@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from binance import AsyncClient
 from time import time
 
-from .services.client import binance_client
+from .services.binance_client import binance_client
 from .services.pattern_functions import pattern, add_b_engulf
 from fastapi.middleware.cors import CORSMiddleware
 
