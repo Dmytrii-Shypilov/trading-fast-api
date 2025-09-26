@@ -43,7 +43,7 @@ client = Client(
 
 
 klines = client.get_historical_klines(
-    interval='5m', symbol='ETHUSDT', limit=40)
+    interval='5m', symbol='LUNCUSDT', limit=40)
 df = convert_to_dataframe(klines)
 pat = add_b_engulf(df)
 print(df)
