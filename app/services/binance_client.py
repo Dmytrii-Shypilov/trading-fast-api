@@ -1,7 +1,9 @@
 from binance import AsyncClient, Client
-from .pattern_manager import PatternManager
+from .indicators_manager import IndicatorsManager
 from .async_manager import AsyncManager
 import pandas as pd
+
+
 
 API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 
@@ -9,7 +11,7 @@ API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 class BinanceClient:
     def __init__(self):
         self.client = AsyncClient(api_key=API)
-        self.patterner = PatternManager()
+        self.indicator = IndicatorsManager()
         self.asyncer = AsyncManager()
 
     # converts klines data to dataframe
