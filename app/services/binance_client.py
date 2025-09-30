@@ -37,7 +37,7 @@ class BinanceClient:
 
     async def filter_symbol_by_volume_and_change(self, symbols: list,  volume: int,  change: float):
         all_tickers = await self.client.get_ticker()
-        print([ticker for ticker in all_tickers if ticker['symbol'] == "XPLUSDT"][0])
+        # print([ticker for ticker in all_tickers if ticker['symbol'] == "XPLUSDT"][0])
         filtered = [{'quote': ticker['symbol'], 'volume': ticker['quoteVolume'], 'change': ticker['priceChangePercent'], 'indicators': []} for ticker in all_tickers if ticker['symbol'] in symbols and float(
             ticker['quoteVolume']) >= volume and float(ticker['priceChangePercent']) >= change]
         
