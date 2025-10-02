@@ -44,4 +44,9 @@ class IndicatorsManager:
     def add_rsi(self, df):
       df['rsi'] = talib.RSI(df['close'], timeperiod=9)
       
-      
+    def add_dema(self, df):
+       
+        df['ema7']= talib.EMA(df['close'], timeperiod=7)
+        df['ema25'] = talib.EMA(df['close'], timeperiod=25)
+        df['dema'] = round(((df['ema7'] - df['ema25'])/df['ema25'])*100, 2)
+        

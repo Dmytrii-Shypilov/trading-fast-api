@@ -46,7 +46,7 @@ class BinanceClient:
     # fetch single pair candlestick data
     async def fetch_kline_data(self, symbol, interval='5m'):
         try:
-            klines = await self.client.get_historical_klines(symbol=symbol, interval=interval)
+            klines = await self.client.get_historical_klines(symbol=symbol, interval=interval, limit=40)
             data_frame = self.convert_to_dataframe(klines)
             # analyze data OR DO IT SEPARATELY IN PATTERNER
             # ----> inside patterner
