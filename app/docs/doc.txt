@@ -8,3 +8,14 @@ TREND:
 
 TECH:
 RSI, ENGULFING, EMA
+
+
+[
+    {
+        symbol: str,
+        volume: int,
+        change: float,
+        trend: {uptrend: bool},
+        tech: [{name: str, value: float/int}]
+    }
+]

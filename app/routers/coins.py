@@ -15,15 +15,23 @@ async def get_coins(quote: str, volume: int, change: int):
     symbols = [pair['quote'] for pair in result]
 
     pairs = await binance_client.get_pairs_klines_data(symbols)
+   
     print(f'{len(symbols)} : {len(pairs)}')
     coins = []
-    for idx, pair in enumerate(pairs):
-        ind_m.add_dema(df=pair)
-        # print(pair['dema'].iloc[-1])
-        if pair['dema'].iloc[-1] > 0:
+    # for idx, pair in enumerate(pairs):
+    #     ind_m.add_dema(df=pair)
+    #     # print(pair['dema'].iloc[-1])
+    #     if pair['dema'].iloc[-1] > 0:
          
-            coins.append([symbols[idx], pair['dema'].iloc[-1]])
+    #         coins.append([symbols[idx], pair['dema'].iloc[-1]])
+    # print(coins)
+    for idx, pair in enumerate(pairs):
+        ind_m.add_dema(pair)
+        res = ind_m.define_uptrend_by_lows(df=pair)
+        if res == True:
+            coins.append(symbols[idx])
+            
+       
     print(coins)
-    # print(pairs[0])
     
     return result
