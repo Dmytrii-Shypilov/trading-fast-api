@@ -11,7 +11,6 @@ API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 class BinanceClient:
     def __init__(self):
         self.client = AsyncClient(api_key=API)
-        self.indicator = IndicatorsManager()
         self.asyncer = AsyncManager()
 
     # converts klines data to dataframe
@@ -60,7 +59,7 @@ class BinanceClient:
 
     async def get_pairs_klines_data(self, list):
         for pair in list:
-            await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair))
+            await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote']))
         data = await self.asyncer.get_results()
         return data
 

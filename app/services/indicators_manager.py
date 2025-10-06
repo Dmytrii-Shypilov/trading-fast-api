@@ -2,32 +2,42 @@ import pandas as pd
 import talib
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
+from app.services.async_manager import AsyncManager
 
 
 class IndicatorsManager:
     # dynamic method dispatch
     def __init__(self):
         self.registry = {
-            'engulfing': self.add_engulfing,
+            'eng': self.add_engulfing,
             'rsi': self.add_rsi,
             'dema': self.add_dema
         }
-    def add_pattern_signals_to_df(self,df, signals: list):
+
+    async def add_pattern_signals_to_df(self, df, signals: list):   
         for signal in signals:
-            self.registry[signal](df)
-        
-        
-    def define_uptrend_by_lows(self, df):
+         await self.registry[signal](df)
+        return df
+    
+    async def assign_pattern_signals(self, pairs_list: list, signals: list):
+        asyncer = AsyncManager()
+
+        for pair in pairs_list:
+            await asyncer.add_async_operation(self.add_pattern_signals_to_df(pair, signals))
+        result = await asyncer.get_results()
+        return result
+
+    async def define_uptrend_by_lows(self, df):
         prices = df['close'].values
         peaks, _ = find_peaks(-prices, distance=10)
 
         # Ensure at least two peaks exist
         if len(peaks) < 2:
             return False  # Not enough peaks to determine trend
-       
+
         # Get the last two peaks
         last_two_peaks = peaks[-2:]  # Last two lows (if available)
-      
+
         # no change of character (no new lower low)
         no_choch = prices[-1] > prices[last_two_peaks[-1]]
         # Compare the last two peak values
@@ -54,22 +64,22 @@ class IndicatorsManager:
             # plt.show()
             return True  # Uptrend confirmed
         return False  # No clear uptrend
-    
-    
-    def define_resistance_breakout(self):
+
+    async def define_resistance_breakout(self):
         pass
 
-    
-    def add_engulfing(self, df):
-        df['eng'] = talib.CDLENGULFING(df['open'],df['high'], df['low'], df['close'])
+    async def add_engulfing(self, df):
+        df['eng'] = talib.CDLENGULFING(
+            df['open'], df['high'], df['low'], df['close'])
 
-    def add_rsi(self, df):
-      df['rsi'] = talib.RSI(df['close'], timeperiod=9)
-      
-    def add_dema(self, df):
-       
-        df['ema7']= talib.EMA(df['close'], timeperiod=7)
+    async def add_rsi(self, df):
+        df['rsi'] = talib.RSI(df['close'], timeperiod=9)
+
+    async def add_dema(self, df):
+
+        df['ema7'] = talib.EMA(df['close'], timeperiod=7)
         df['ema25'] = talib.EMA(df['close'], timeperiod=25)
         df['dema'] = round(((df['ema7'] - df['ema25'])/df['ema25'])*100, 2)
-        
-    
+
+
+indicators_manager = IndicatorsManager()
