@@ -47,19 +47,15 @@ class BinanceClient:
         try:
             klines = await self.client.get_historical_klines(symbol=symbol, interval=interval, limit=40)
             data_frame = self.convert_to_dataframe(klines)
-            # analyze data OR DO IT SEPARATELY IN PATTERNER
-            # ----> inside patterner
-            # await asyncer.add_async_op(self.patterner.add_patterns())
-            # kline = await asyncer.get_results()
             return data_frame
         except Exception as e:
             print(f"Exception fetching coin {symbol} from Binance API")
 
     # fetch multiple pairs candlestick data
 
-    async def get_pairs_klines_data(self, list):
+    async def get_pairs_klines_data(self, list, interval):
         for pair in list:
-            await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote']))
+            await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote'], interval=interval))
         data = await self.asyncer.get_results()
         return data
 
