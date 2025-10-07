@@ -27,7 +27,7 @@ class IndicatorsManager:
         result = await asyncer.get_results()
         return result
 
-    async def define_uptrend_by_lows(self, df):
+    def define_uptrend_by_lows(self, df):
         prices = df['close'].values
         peaks, _ = find_peaks(-prices, distance=10)
 
@@ -64,6 +64,14 @@ class IndicatorsManager:
             # plt.show()
             return True  # Uptrend confirmed
         return False  # No clear uptrend
+    
+    def filter_coins_by_trend(self, df_list):
+        filtered = []
+        for df in df_list:
+           is_uptrend = self.define_uptrend_by_lows(df=df)
+           if is_uptrend:
+               filtered.append(df)
+        return filtered
 
     async def define_resistance_breakout(self):
         pass

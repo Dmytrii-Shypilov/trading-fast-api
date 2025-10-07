@@ -57,8 +57,10 @@ class BinanceClient:
         for pair in list:
             await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote'], interval=interval))
         data = await self.asyncer.get_results()
+        # await self.client.close_connection()
         return data
 
+   
     def fetch_order_book(self):
         pass
 
