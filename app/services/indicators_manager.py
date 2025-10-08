@@ -1,7 +1,7 @@
 import pandas as pd
 import talib
 from scipy.signal import find_peaks
-import matplotlib.pyplot as plt
+import numpy as np
 from app.services.async_manager import AsyncManager
 
 
@@ -77,8 +77,35 @@ class IndicatorsManager:
         pass
 
     async def add_engulfing(self, df):
-        df['eng'] = talib.CDLENGULFING(
-            df['open'], df['high'], df['low'], df['close'])
+            # Shift previous candle values
+        prev_open = df['open'].shift(1)
+        prev_close = df['close'].shift(1)
+        
+        # Current candle values
+        curr_open = df['open']
+        curr_close = df['close']
+        
+        # Bullish engulfing
+        bullish = (
+            (prev_close < prev_open) &
+            (curr_close > curr_open) &
+            (curr_open <= prev_close) &
+            (curr_close >= prev_open)
+        )
+
+        # Bearish engulfing
+        bearish = (
+            (prev_close > prev_open) &
+            (curr_close < curr_open) &
+            (curr_open >= prev_close) &
+            (curr_close <= prev_open)
+        )
+
+        # Assign values: 100 for bullish, -100 for bearish, 0 otherwise
+        df['eng'] = np.where(bullish, 100, np.where(bearish, -100, 0))
+        # df['eng'] = talib.CDLENGULFING(
+        #     df['open'], df['high'], df['low'], df['close'])
+        # df['eng'] = np.where(df['eng'] == 100, 100, 0)
 
     async def add_rsi(self, df):
         df['rsi'] = talib.RSI(df['close'], timeperiod=9)
