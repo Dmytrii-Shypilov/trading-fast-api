@@ -43,7 +43,7 @@ class BinanceClient:
         return filtered
 
     # fetch single pair candlestick data
-    async def fetch_kline_data(self, symbol, interval='5m'):
+    async def fetch_kline_data(self, symbol, interval):
         try:
             klines = await self.client.get_historical_klines(symbol=symbol, interval=interval, limit=40)
             data_frame = self.convert_to_dataframe(klines)

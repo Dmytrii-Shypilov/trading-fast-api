@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import talib
 from scipy.signal import find_peaks
@@ -120,3 +121,7 @@ class IndicatorsManager:
 
 
 indicators_manager = IndicatorsManager()
+
+
+
+

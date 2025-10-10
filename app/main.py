@@ -7,6 +7,7 @@ from .services.pattern_functions import pattern, add_b_engulf
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.coins import coins_router
+from app.routers.test_route import test_routes
 
 API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 
@@ -43,3 +44,4 @@ coins = ['BTCUSDT', 'ETHUSDT', 'LUNCUSDT', 'BTCUSDT', 'ETHUSDT', 'BTCUSDT', 'ETH
 #     return [{'pair': 'USDTBTC'},{'pair': 'USDTBTC'}, {'pair': 'USDTBTC'}]
 
 app.include_router(coins_router)
+app.include_router(test_routes)
