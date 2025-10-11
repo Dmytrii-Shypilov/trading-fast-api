@@ -12,13 +12,14 @@ def transform_data_to_response(pairs_data, indicators, df):
     }
     # print(payload.indicators)
     for ind in indicators:
-        if ind in ['rsi', 'dema']:
-            res_dict['indicators']['numerical'].append(
-                {'name': ind, 'value': float(df[ind].iloc[-1])})
-        else:
-            if float(df[ind].iloc[-1]) > 0:
-                res_dict['indicators']['binary'].append(
-                {'name': ind, 'value': float(df[ind].iloc[-1])})
-            
+        if ind in df.columns.tolist():
+            if ind in ['rsi', 'dema']:
+                res_dict['indicators']['numerical'].append(
+                    {'name': ind, 'value': float(df[ind].iloc[-1])})
+            else:
+                if float(df[ind].iloc[-1]) > 0:
+                    res_dict['indicators']['binary'].append(
+                    {'name': ind, 'value': float(df[ind].iloc[-1])})
+                
     # print(res_dict)
     return res_dict

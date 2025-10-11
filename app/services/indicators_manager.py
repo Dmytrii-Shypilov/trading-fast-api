@@ -8,6 +8,7 @@ from app.services.async_manager import AsyncManager
 class IndicatorsManager:
     # dynamic method dispatch
     def __init__(self):
+        self.asyncer = AsyncManager()
         self.registry = {
             'eng': self.add_engulfing,
             'rsi': self.add_rsi,
@@ -20,11 +21,10 @@ class IndicatorsManager:
         return df
     
     async def assign_pattern_signals(self, pairs_list: list, signals: list):
-        asyncer = AsyncManager()
 
         for pair in pairs_list:
-            await asyncer.add_async_operation(self.add_pattern_signals_to_df(pair, signals))
-        result = await asyncer.get_results()
+            await self.asyncer.add_async_operation(self.add_pattern_signals_to_df(pair, signals))
+        result = await self.asyncer.get_results()
         return result
 
     def define_uptrend_by_lows(self, df):
@@ -110,13 +110,17 @@ class IndicatorsManager:
         #     print(df.tail())
 
     async def add_rsi(self, df):
-        df['rsi'] = talib.RSI(df['close'], timeperiod=9)
-
+        if len(df['close']) > 9:
+            df['rsi'] = talib.RSI(df['close'], timeperiod=9)
+        # else:
+        #     df['rsi'] = -100
+        
     async def add_dema(self, df):
-
-        df['ema7'] = talib.EMA(df['close'], timeperiod=7)
-        df['ema25'] = talib.EMA(df['close'], timeperiod=25)
-        df['dema'] = round(((df['ema7'] - df['ema25'])/df['ema25'])*100, 2)
-
+        if len(df['close']) > 25:
+            df['ema7'] = talib.EMA(df['close'], timeperiod=7)
+            df['ema25'] = talib.EMA(df['close'], timeperiod=25)
+            df['dema'] = round(((df['ema7'] - df['ema25'])/df['ema25'])*100, 3)
+        # else:
+        #     df['dema'] = -100
 
 indicators_manager = IndicatorsManager()
