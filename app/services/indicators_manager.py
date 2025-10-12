@@ -103,11 +103,7 @@ class IndicatorsManager:
 
         # Assign values: 100 for bullish, -100 for bearish, 0 otherwise
         df['eng'] = np.where(bullish, 100, np.where(bearish, -100, 0))
-        # df['eng'] = talib.CDLENGULFING(
-        #     df['open'], df['high'], df['low'], df['close'])
-        # df['eng'] = np.where(df['eng'] == 100, 100, 0)
-        # if df['eng'].iloc[-1] == 100:
-        #     print(df.tail())
+    
 
     async def add_rsi(self, df):
         if len(df['close']) > 9:
