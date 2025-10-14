@@ -73,8 +73,16 @@ class IndicatorsManager:
                filtered.append(df)
         return filtered
 
-    async def define_resistance_breakout(self):
-        pass
+    async def get_numerical_indicators(self,df, indicators: list = ['rsi'] ):
+        indicators = []
+        df_with_inds = await self.add_pattern_signals_to_df(df=df, signals=indicators)
+        for ind in indicators:
+            indicators.append({
+                'name': ind,
+                'value': df_with_inds[ind].iloc[-1]
+            })
+        return indicators
+        
 
     async def add_engulfing(self, df):
             # Shift previous candle values

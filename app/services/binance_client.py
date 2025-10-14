@@ -60,15 +60,32 @@ class BinanceClient:
         # await self.client.close_connection()
         return data
 
+
    
     async def fetch_order_book(self, symbol):
         try:
             order_book = await self.client.get_order_book(symbol=symbol)
-            return symbol, order_book
+            return order_book
         except BinanceAPIException as e:
              print(f"Error fetching order book for {symbol}: {e}")
              
-
+    async def fetch_pair_stream_data(self, pair: str):
+            order_book = await self.fetch_order_book(symbol=pair)
+            price_data = await self.client.get_ticker(symbol=pair)
+            
+            return {
+                'symbol': price_data['symbol'],
+                'currPrice': price_data['lastPrice'],
+                'change': price_data['priceChangePercent'],
+                'orderBook': order_book,   
+            }
+            
+    async def get_traded_stream_data(self, pairs: list):
+        for pair in pairs:
+            await self.asyncer.add_async_operation(self.fetch_pair_stream_data(pair=pair))
+        data = await self.asyncer.get_results()
+        print(data)
+        return data
 
 
 binance_client = BinanceClient()
