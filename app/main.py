@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.coins import coins_router
 from app.routers.test_route import test_routes
+from app.routers.traded_pairs_stream import traded_pair_stream
 
 API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 
@@ -45,3 +46,4 @@ coins = ['BTCUSDT', 'ETHUSDT', 'LUNCUSDT', 'BTCUSDT', 'ETHUSDT', 'BTCUSDT', 'ETH
 
 app.include_router(coins_router)
 app.include_router(test_routes)
+app.include_router(traded_pair_stream)

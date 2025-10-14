@@ -1,4 +1,4 @@
-from binance import AsyncClient, Client
+from binance import AsyncClient, Client, BinanceAPIException
 from .indicators_manager import IndicatorsManager
 from .async_manager import AsyncManager
 import pandas as pd
@@ -61,11 +61,20 @@ class BinanceClient:
         return data
 
    
-    def fetch_order_book(self):
-        pass
+    async def fetch_order_book(self, symbol):
+        try:
+            order_book = await self.client.get_order_book(symbol=symbol)
+            return symbol, order_book
+        except BinanceAPIException as e:
+             print(f"Error fetching order book for {symbol}: {e}")
+             
+
 
 
 binance_client = BinanceClient()
+
+# receive the pairs list fro stream
+# for each get curr price and change % (get_ticker()), order book info, basic indicators?, 
 
 # async def init_client(self):
 #     """Create the async Binance client once."""
