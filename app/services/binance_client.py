@@ -11,7 +11,7 @@ API = 'W4G23O8koOoYXwoG6wHM1LJTEbaHHzm9uiLxjeToi10Owyanev1DipEwkTFvvzxe'
 class BinanceClient:
     def __init__(self):
         self.client = AsyncClient(api_key=API)
-        self.asyncer = AsyncManager()
+        self.async_man = AsyncManager
 
     # converts klines data to dataframe
 
@@ -54,9 +54,10 @@ class BinanceClient:
     # fetch multiple pairs candlestick data
 
     async def get_pairs_klines_data(self, list, interval):
+        asyncer = self.async_man()
         for pair in list:
-            await self.asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote'], interval=interval))
-        data = await self.asyncer.get_results()
+            await asyncer.add_async_operation(self.fetch_kline_data(symbol=pair['quote'], interval=interval))
+        data = await asyncer.get_results()
         # await self.client.close_connection()
         return data
 
@@ -81,10 +82,10 @@ class BinanceClient:
             }
             
     async def get_traded_stream_data(self, pairs: list):
+        asyncer = self.async_man()
         for pair in pairs:
-            await self.asyncer.add_async_operation(self.fetch_pair_stream_data(pair=pair))
-        data = await self.asyncer.get_results()
-        print(data)
+            await asyncer.add_async_operation(self.fetch_pair_stream_data(pair=pair))
+        data = await asyncer.get_results()
         return data
 
 

@@ -17,6 +17,8 @@ class RequestBody(BaseModel):
 
 @coins_router.post('/coins')
 async def get_coins(body: RequestBody):
+    print('COINNNNNS')
+    print(body)
     data = await binance_client.get_symbol_traded_pairs(quote=body.quote)
     filtered_pairs = await binance_client.filter_symbol_by_volume_and_change(symbols=data, volume=body.volume, change=body.change)
     pairs_df = await binance_client.get_pairs_klines_data(list=filtered_pairs, interval=body.frame)

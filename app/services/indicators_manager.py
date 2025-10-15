@@ -8,7 +8,7 @@ from app.services.async_manager import AsyncManager
 class IndicatorsManager:
     # dynamic method dispatch
     def __init__(self):
-        self.asyncer = AsyncManager()
+        self.async_man = AsyncManager
         self.registry = {
             'eng': self.add_engulfing,
             'rsi': self.add_rsi,
@@ -21,10 +21,12 @@ class IndicatorsManager:
         return df
     
     async def assign_pattern_signals(self, pairs_list: list, signals: list):
-
+        result = []
+        # asyncer = self.async_man()
         for pair in pairs_list:
-            await self.asyncer.add_async_operation(self.add_pattern_signals_to_df(pair, signals))
-        result = await self.asyncer.get_results()
+           df = await self.add_pattern_signals_to_df(pair, signals)
+           result.append(df)
+        # result = await asyncer.get_results()
         return result
 
     def define_uptrend_by_lows(self, df):
@@ -120,6 +122,7 @@ class IndicatorsManager:
         #     df['rsi'] = -100
         
     async def add_dema(self, df):
+   
         if len(df['close']) > 25:
             df['ema7'] = talib.EMA(df['close'], timeperiod=7)
             df['ema25'] = talib.EMA(df['close'], timeperiod=25)
