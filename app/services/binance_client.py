@@ -72,7 +72,7 @@ class BinanceClient:
     async def fetch_pair_stream_data(self, pair: str):
             order_book = await self.fetch_order_book(symbol=pair)
             price_data = await self.client.get_ticker(symbol=pair)
-            
+            # get indicators ?           
             return {
                 'symbol': price_data['symbol'],
                 'currPrice': price_data['lastPrice'],
