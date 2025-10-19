@@ -26,7 +26,10 @@ async def get_coins(body: RequestBody):
     # filter by uptrend if required
     if body.trend['uptrend']:
         pairs_df = indicators_manager.filter_coins_by_trend(pairs_df)
-    result  = await indicators_manager.assign_pattern_signals(pairs_list=pairs_df, signals=body.indicators)
+    if len(body.indicators):
+        result  = await indicators_manager.assign_pattern_signals(pairs_list=pairs_df, signals=body.indicators)
+    else:
+        result = pairs_df
     
     print(len(data))
     print(len(filtered_pairs))
